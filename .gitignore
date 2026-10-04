@@ -1,0 +1,7 @@
+node_modules/
+dist/
+docs-dist/
+.verification/
+*.tgz
+*.tsbuildinfo
+.DS_Store

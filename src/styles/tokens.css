@@ -1,0 +1,34 @@
+/* Verified Never-Setting-Sun by Halifax; semantic neutrals below are derived. */
+:root {
+  --palette-frost: #fff5f5;
+  --palette-sun: #ffc62b;
+  --palette-orange: #fe6900;
+  --palette-red: #c82000;
+  --palette-chocolate: #261914;
+
+  --background: #f3f4f2;
+  --card: #fcfcfa;
+  --muted: #e9eae7;
+  --muted-foreground: #62635e;
+  --foreground: var(--palette-chocolate);
+  --primary: var(--palette-chocolate);
+  --primary-foreground: var(--card);
+  --secondary: var(--palette-sun);
+  --destructive: var(--palette-red);
+  --border: #b9bcb4;
+  --input: #d6d8d1;
+  --ring: var(--palette-chocolate);
+  --surface-recessed: #e2e4de;
+  --surface-highlight: #ffffff;
+  --signal: var(--palette-orange);
+  --alert-surface: var(--palette-frost);
+  --radius: 0.1875rem;
+  --type-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --type-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --shadow-panel: 0 2px 3px rgb(38 25 20 / 5%), 0 14px 32px rgb(38 25 20 / 5%);
+  --shadow-control:
+    inset 0 1px 0 var(--surface-highlight), 0 2px 2px rgb(38 25 20 / 14%);
+  --shadow-pressed:
+    inset 0 2px 3px rgb(38 25 20 / 18%), 0 1px 0 var(--surface-highlight);
+  --ease-mechanical: cubic-bezier(0.16, 1, 0.3, 1);
+}

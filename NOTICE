@@ -1,0 +1,40 @@
+Home design system
+
+The repository's original code and documentation are licensed under LICENSE.
+This does not replace third-party authors' notices or license terms.
+
+Color attribution
+Never-Setting-Sun by Halifax, COLOURlovers palette 3060721, CC-BY:
+https://www.colourlovers.com/palette/3060721/Never-Setting-Sun
+Original colors: #FFF5F5, #FFC62B, #FE6900, #C82000, #261914.
+The palette screenshot supplied for the original implementation identified
+CC-BY but did not specify a version. No version is asserted here.
+Semantic surface neutrals are separately derived; palette values are unchanged.
+Retain this attribution when redistributing the palette.
+
+Component provenance
+src/components/ui/button.tsx, separator.tsx, switch.tsx, tabs.tsx, and
+tooltip.tsx are derived from shadcn/ui component patterns and customized with
+the Home design system's material treatment:
+https://ui.shadcn.com/
+https://github.com/shadcn-ui/ui
+No ownership of the upstream components is claimed. Consult upstream notices
+for their authorship and applicable license.
+
+Runtime dependencies (external to the JavaScript bundle)
+Radix UI: @radix-ui/react-separator, @radix-ui/react-slot,
+@radix-ui/react-switch, @radix-ui/react-tabs, @radix-ui/react-tooltip
+https://www.radix-ui.com/primitives
+class-variance-authority: https://github.com/joe-bell/cva
+clsx: https://github.com/lukeed/clsx
+tailwind-merge: https://github.com/dcastil/tailwind-merge
+React and React DOM (peer dependencies): https://react.dev/
+
+Build-time CSS and showcase dependencies
+Tailwind CSS: https://tailwindcss.com/
+tw-animate-css: https://github.com/Wombosvideo/tw-animate-css
+Lucide icons (documentation specimens only): https://lucide.dev/
+
+Dependencies retain their own licenses. Their authorship is not covered by
+this repository's original-code copyright notice. See the installed packages
+and upstream projects for their complete notices and terms.
