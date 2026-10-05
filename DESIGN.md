@@ -21,6 +21,7 @@ colors:
   ring: '#261914'
   surface-highlight: '#FFFFFF'
   signal: '#FE6900'
+  success: '#2F6B3C'
 typography:
   headline:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -106,6 +107,9 @@ are derived semantic neutrals, not additional Halifax colors. See `NOTICE`.
 - Chocolate: foreground, primary actions, focus rings.
 - Sun: secondary controls, checked switches, text selection.
 - Orange: active indicator lights, not the default button fill.
+- Success green (`--success`, `#2F6B3C`): confirmed success/connection indicators.
+  This semantic addition is independently derived, not part of the five-color
+  Halifax palette; orange active indicators retain their original meaning.
 - Red: destructive text/borders and alert states.
 - Frost: palette specimen and the alert-surface alias, not general panel fill.
 - Background/card/muted: chassis, raised enamel, inset tracks.
@@ -162,7 +166,8 @@ in an inset track.
 
 Panels, fields, buttons, and tab keys share a 3px radius; Tailwind's `rounded-sm`,
 `rounded-md`, and `rounded-lg` map to that semantic radius. Icon buttons are
-48px or 64px circles; indicator dots and knobs are circular. Switch tracks are
+48px or 64px circles; compact `IconButton` controls are 36px circles, increasing
+to 44px for coarse pointers. Indicator dots and knobs are circular. Switch tracks are
 pill-shaped because a circular thumb travels within them, not because every
 panel should be a pill. Borders are generally 1px.
 
@@ -176,20 +181,33 @@ separator semantics. Typed variants use CVA; `cn` combines `clsx` and
 - Buttons: chocolate default, raised enamel outline, Sun secondary, transparent
   ghost, enamel/red destructive, underlined link. Default/small minimum height
   44px, large 52px; horizontal padding 20px/12px/24px. Icon sizes are 48px/64px
-  with 16px/20px SVGs. `IconButton` requires a label and supplies a tooltip.
+  with 16px/20px SVGs. `IconButton` requires a label and supplies a tooltip;
+  its optional `size="sm"` uses a 36px circle (44px for coarse pointers) with
+  the same 16px icon, while the default remains 48px.
 - Panels: card fill, border, and panel shadow; recessed uses muted fill/no
   shadow. Name semantic sections when they represent a region.
 - Fields: 48px minimum height, card fill, inset contact shadow, shared radius.
   Invalid fields have a destructive border plus associated error copy. Disabled
-  fields use 50% opacity; buttons/tab keys use 45%.
+  fields use 50% opacity; buttons/tab keys use 45%. Native `Input`, `Select`,
+  and `Textarea` share `.field`, preserve native props and React 19 refs, and
+  leave labels/descriptions/validation to the host. Selects keep the platform
+  picker; textareas resize vertically.
 - Tabs: inset muted 48px track with 40px keys. Active keys gain card fill,
   border, and shadow. The line variant removes track fill/border.
 - Switches: 48×28px inset track, 20px card thumb; checked Sun fill and 24px thumb
   translation, unchecked 2px. The accepted `size` prop does not change geometry.
-- Status: orange on, muted off, red alert, always paired with text.
+- Status: orange on, muted off, red alert, green success, always paired with text.
+  Native span props and merged classes allow hosts to add live-region semantics
+  explicitly; the decorative dot remains hidden from assistive technology.
 - Navigation dial: 68px knob in a 180px group, -60°/0°/60° detents, mechanical
   face rotation. Native range and labels expose selection; drag preview only
   commits on release. Home/CV/Blog are fixed local navigation labels, not pages.
+- Rotary dial: the same mechanics with typed string options, at least two unique
+  values, and equally spaced end-stopped detents. Compact mode is a horizontal
+  label/knob/label row, 36px high (44px for coarse pointers), with hidden help.
+  Visible labels remain directly clickable; selected labels are underlined as
+  well as exposed with `aria-pressed`. The native range has an explicit name
+  and selected-option value text.
 
 ## Motion and accessibility
 

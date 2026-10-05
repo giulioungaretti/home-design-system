@@ -11,11 +11,19 @@ export function clampDialAngle(angle: number) {
 }
 
 export function dialAngle(index: number) {
-  return -60 + index * 60
+  return rotaryAngle(index, dialPages.length)
 }
 
 export function dialPosition(angle: number) {
-  return Math.round((clampDialAngle(angle) + 60) / 60)
+  return rotaryPosition(angle, dialPages.length)
+}
+
+export function rotaryAngle(index: number, count: number) {
+  return -60 + index * (120 / (count - 1))
+}
+
+export function rotaryPosition(angle: number, count: number) {
+  return Math.round(((clampDialAngle(angle) + 60) / 120) * (count - 1))
 }
 
 export function angularDelta(from: number, to: number) {

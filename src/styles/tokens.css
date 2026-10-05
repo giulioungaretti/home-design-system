@@ -21,6 +21,7 @@
   --surface-recessed: #e2e4de;
   --surface-highlight: #ffffff;
   --signal: var(--palette-orange);
+  --success: #2f6b3c;
   --alert-surface: var(--palette-frost);
   --radius: 0.1875rem;
   --type-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;

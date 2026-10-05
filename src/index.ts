@@ -1,4 +1,7 @@
 export { Button, buttonVariants } from './components/ui/button.js'
+export { Input } from './components/ui/input.js'
+export { Select } from './components/ui/select.js'
+export { Textarea } from './components/ui/textarea.js'
 export { Separator } from './components/ui/separator.js'
 export { Switch } from './components/ui/switch.js'
 export {
@@ -9,6 +12,8 @@ export {
 } from './components/ui/tooltip.js'
 export { IconButton, Panel, PageHeading, Status } from './components/system.js'
 export { NavigationDial } from './components/NavigationDial.js'
+export { RotaryDial } from './components/RotaryDial.js'
+export type { DialOption, RotaryDialProps } from './components/RotaryDial.js'
 export { cn } from './lib/utils.js'
 export {
   angularDelta, clampDialAngle, dialAngle, dialPages, dialPosition,

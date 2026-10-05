@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import {
   Button, buttonVariants, Switch, TooltipProvider, IconButton, Panel, Status, cn,
@@ -39,9 +40,38 @@ describe('reusable system', () => {
       </TooltipProvider>,
     )
     const button = screen.getByRole('button', { name: 'Reset demo' })
-    expect(button).toHaveClass('rounded-full')
+    expect(button).toHaveClass('rounded-full', 'size-12')
     expect(button).toHaveAttribute('aria-pressed', 'true')
     await userEvent.click(button)
+    expect(onClick).toHaveBeenCalledOnce()
+  })
+  it('offers compact circular controls without changing native props, refs, or tooltip names', async () => {
+    const ref = createRef<HTMLButtonElement>()
+    const onClick = vi.fn()
+    render(
+      <TooltipProvider>
+        <IconButton ref={ref} size="sm" type="button" label="Compact reset" className="consumer-control" onClick={onClick}>
+          <span aria-hidden="true">↻</span>
+        </IconButton>
+        <IconButton size="default" label="Default reset" disabled onClick={onClick}>
+          <span aria-hidden="true">↻</span>
+        </IconButton>
+      </TooltipProvider>,
+    )
+    const button = screen.getByRole('button', { name: 'Compact reset' })
+    expect(ref.current).toBe(button)
+    expect(button).toHaveClass('rounded-full', 'size-9', 'pointer-coarse:size-11', 'consumer-control')
+    expect(button).not.toHaveClass('size-12')
+    expect(button).toHaveAttribute('type', 'button')
+    const user = userEvent.setup()
+    await user.tab()
+    expect(button).toHaveFocus()
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Compact reset')
+    await user.keyboard('{Enter}')
+    expect(onClick).toHaveBeenCalledOnce()
+    const disabled = screen.getByRole('button', { name: 'Default reset' })
+    expect(disabled).toHaveClass('rounded-full', 'size-12')
+    await user.click(disabled)
     expect(onClick).toHaveBeenCalledOnce()
   })
   it('does not activate disabled buttons', async () => {
@@ -82,5 +112,22 @@ describe('reusable system', () => {
       'data-tone',
       'alert',
     )
+  })
+  it('adds an opt-in success status while preserving native span props and orange on state', () => {
+    const ref = createRef<HTMLSpanElement>()
+    render(
+      <>
+        <Status tone="success" className="connection connected" role="status" aria-live="polite" ref={ref}>Connected</Status>
+        <Status tone="on">Running</Status>
+      </>,
+    )
+    const connected = screen.getByRole('status')
+    expect(ref.current).toBe(connected)
+    expect(connected).toHaveClass('status', 'connection', 'connected')
+    expect(connected).toHaveAttribute('data-tone', 'success')
+    expect(connected).toHaveAttribute('aria-live', 'polite')
+    expect(connected.querySelector('.status-dot')).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByText('Running')).toHaveAttribute('data-tone', 'on')
+    expect(screen.getByText('Running')).not.toHaveAttribute('role')
   })
 })

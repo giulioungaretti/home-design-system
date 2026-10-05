@@ -26,12 +26,14 @@ export function Panel({
 export function Status({
   tone = 'off',
   children,
-}: {
-  tone?: 'on' | 'off' | 'alert'
+  className,
+  ...props
+}: ComponentProps<'span'> & {
+  tone?: 'on' | 'off' | 'alert' | 'success'
   children: ReactNode
 }) {
   return (
-    <span className="status" data-tone={tone}>
+    <span className={cn('status', className)} data-tone={tone} {...props}>
       <span className="status-dot" aria-hidden="true" />
       {children}
     </span>
@@ -44,18 +46,27 @@ type IconButtonProps = Omit<
 > & {
   label: string
   children: ReactNode
+  size?: 'default' | 'sm'
 }
 
 export function IconButton({
   label,
   children,
   variant = 'outline',
+  size = 'default',
+  className,
   ...props
 }: IconButtonProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button size="icon" variant={variant} aria-label={label} {...props}>
+        <Button
+          size="icon"
+          variant={variant}
+          aria-label={label}
+          className={cn(size === 'sm' && 'size-9 pointer-coarse:size-11', className)}
+          {...props}
+        >
           {children}
         </Button>
       </TooltipTrigger>

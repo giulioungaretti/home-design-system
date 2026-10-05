@@ -21,6 +21,9 @@ try {
   for (const required of [
     'dist/index.js', 'dist/styles.css', 'dist/tokens.css', 'dist/types/index.d.ts',
     'dist/types/components/ui/button.d.ts', 'dist/types/components/NavigationDial.d.ts',
+    'dist/types/components/ui/input.d.ts', 'dist/types/components/ui/select.d.ts',
+    'dist/types/components/ui/textarea.d.ts',
+    'dist/types/components/RotaryDial.d.ts',
     'README.md', 'DESIGN.md', 'LICENSE', 'NOTICE', 'package.json',
   ]) assert(files.has(required), `Missing packed file: ${required}`)
   for (const name of files) {
@@ -73,20 +76,56 @@ try {
       createElement(library.NavigationDial, { value: 'home', onValueChange() {} }),
     )))
   assert(markup.includes('control-signal') && markup.includes('aria-valuetext="Home"'), 'Packed ESM could not render actual components')
+  const fields = renderToStaticMarkup(createElement('form', null,
+    createElement(library.Input, { name: 'title', 'aria-label': 'Title', defaultValue: 'Radio' }),
+    createElement(library.Select, { name: 'source', 'aria-label': 'Source', defaultValue: 'radio' },
+      createElement('option', { value: 'radio' }, 'Radio')),
+    createElement(library.Textarea, { name: 'notes', 'aria-label': 'Notes', defaultValue: 'Morning' }),
+  ))
+  for (const tag of ['input', 'select', 'textarea']) {
+    assert(fields.includes(`<${tag} data-slot="${tag}" class="field"`), `Packed ${tag} must retain native semantics and field material`)
+  }
+  assert(fields.includes('selected=""'), 'Packed Select must retain native default selection')
+  assert(css.includes('.size-9') && css.includes('(pointer:coarse)'), 'Compact icon and coarse-pointer styles must be compiled')
+  const languageOptions = [{ value: 'da', label: 'Dansk' }, { value: 'en', label: 'English' }]
+  const compact = renderToStaticMarkup(createElement(library.RotaryDial, {
+    options: languageOptions, value: 'en', onValueChange() {}, label: 'Answer language', size: 'sm',
+  }))
+  assert(compact.includes('aria-label="Answer language"') && compact.includes('aria-valuetext="English"') && compact.includes('max="1"'), 'Packed generic dial must render two native detents')
+  const success = renderToStaticMarkup(createElement(library.Status, { tone: 'success', className: 'connection connected' }, 'Connected'))
+  assert(success.includes('class="status connection connected"') && success.includes('data-tone="success"'), 'Packed status must retain success and consumer classes')
+  assert(css.includes('--success:') && css.includes('[data-tone=success]'), 'Success token and styles must ship')
 
   const consumer = join(work, 'consumer')
   mkdirSync(join(consumer, 'node_modules/@giulioungaretti'), { recursive: true })
   symlinkSync(packed, join(consumer, 'node_modules/@giulioungaretti/home-design-system'), 'dir')
   writeFileSync(join(consumer, 'package.json'), '{"type":"module"}\n')
   writeFileSync(join(consumer, 'usage.tsx'), `
-import { Button, IconButton, NavigationDial, Panel, TooltipProvider, type NavigationPage } from '@giulioungaretti/home-design-system'
-import type { ComponentProps } from 'react'
+import { Button, IconButton, Input, Select, Textarea, NavigationDial, RotaryDial, Status, Panel, TooltipProvider, type NavigationPage } from '@giulioungaretti/home-design-system'
+import { createRef, type ComponentProps } from 'react'
 const page: NavigationPage = 'home'
 const props: ComponentProps<typeof Button> = { variant: 'secondary', size: 'icon' }
 // @ts-expect-error Invalid variants must remain rejected by the public declarations.
 const invalid: ComponentProps<typeof Button> = { variant: 'not-a-variant' }
 void invalid
-export const specimen = <TooltipProvider><Panel><Button {...props}>Ready</Button><IconButton label="Reset"><span /></IconButton><NavigationDial value={page} onValueChange={() => {}} /></Panel></TooltipProvider>
+// @ts-expect-error IconButton accepts only its own compact/default sizes.
+const invalidIcon: ComponentProps<typeof IconButton> = { label: 'Reset', children: null, size: 'lg' }
+// @ts-expect-error Native Select size remains numeric.
+const invalidSelect: ComponentProps<typeof Select> = { size: 'sm' }
+// @ts-expect-error Input refs must target an input.
+const invalidRef: ComponentProps<typeof Input> = { ref: createRef<HTMLTextAreaElement>() }
+void invalidIcon; void invalidSelect; void invalidRef
+const languages = [{ value: 'da', label: 'Dansk' }, { value: 'en', label: 'English' }] as const
+// @ts-expect-error Generic options determine the allowed value.
+const invalidDial = <RotaryDial options={languages} value="fr" onValueChange={() => {}} label="Language" />
+void invalidDial
+export const language = <RotaryDial options={languages} value="da" onValueChange={(value) => { const language: 'da' | 'en' = value; void language }} label="Answer language" size="sm" className="language-control" />
+export const connection = <Status tone="success" ref={createRef<HTMLSpanElement>()} className="connection connected" aria-live="polite">Connected</Status>
+export const specimen = <TooltipProvider><Panel><Button {...props}>Ready</Button><IconButton label="Reset"><span /></IconButton><IconButton size="sm" label="Compact reset"><span /></IconButton><NavigationDial value={page} onValueChange={() => {}} />
+<Input ref={createRef<HTMLInputElement>()} size={20} type="email" name="email" aria-label="Email" aria-invalid aria-describedby="email-error" onChange={(event) => { const value: string = event.target.value; void value }} />
+<Select ref={createRef<HTMLSelectElement>()} multiple size={3} name="sources" aria-label="Sources" onChange={(event) => { const options: HTMLCollectionOf<HTMLOptionElement> = event.target.selectedOptions; void options }}><option value="radio">Radio</option></Select>
+<Textarea ref={createRef<HTMLTextAreaElement>()} rows={4} maxLength={200} name="notes" aria-label="Notes" onChange={(event) => { const value: string = event.target.value; void value }} />
+</Panel></TooltipProvider>
 `)
   execFileSync(process.execPath, [join(root, 'node_modules/typescript/bin/tsc'),
     '--ignoreConfig', '--noEmit', '--strict', '--jsx', 'react-jsx',
