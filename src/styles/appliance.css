@@ -220,6 +220,9 @@
   .status[data-tone='on'] .status-dot {
     background: var(--signal);
   }
+  .status[data-tone='success'] .status-dot {
+    background: var(--success);
+  }
   .status[data-tone='alert'] {
     color: var(--destructive);
   }

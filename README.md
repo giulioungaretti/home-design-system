@@ -88,13 +88,14 @@ All components and helpers are named exports; types can be derived with React's
 | `IconButton` | Required action `label` and icon `children`; circular 48px control plus tooltip. Optional `size="sm"` is 36px, increasing to 44px for coarse pointers; `size="default"` preserves 48px. Wrap the application in `TooltipProvider`. Accepts Button variant and native props, not `asChild`. |
 | `Input`, `Select`, `Textarea` | Native `input`, `select`, and `textarea` props, including React 19 `ref`, merged `className`, and `data-slot="input"`/`"select"`/`"textarea"`. Shared `.field` material and 48px minimum height. `Select` accepts native `option`/`optgroup` children, `multiple`, and `size`; no custom popup. |
 | `Panel` | Semantic `section`; `surface="raised"` (default) or `"recessed"`. Supply a heading and `aria-labelledby`, or `aria-label`. |
-| `Status` | `tone="off"` (default), `"on"`, or `"alert"` with required text children. Decorative signal dot; not a live region by itself. |
+| `Status` | `tone="off"` (default), `"on"` (orange), `"alert"` (red), or `"success"` (green) with required text children. Native span props/ref and merged `className`. Decorative `.status-dot`; not a live region unless you supply `role`/`aria-live`. |
 | `PageHeading` | Required `title` renders an h1; optional introductory children. Use one h1 per page. |
 | `Switch` | Radix controlled `checked`/`onCheckedChange` or uncontrolled `defaultChecked`; label with `htmlFor`/`id` or `aria-label`. `size` accepts `sm`/`default`; both currently use the same 48×28 geometry. |
 | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | Radix `value`/`onValueChange` or `defaultValue`; give triggers/content matching values. `TabsList variant="default"` or `"line"`. Horizontal/vertical orientation. |
 | `Separator` | Radix separator, horizontal/vertical; decorative by default. |
 | `TooltipProvider`, `Tooltip`, `TooltipTrigger`, `TooltipContent` | Radix primitives with material tokens; provider defaults to zero delay. Tooltips supplement, never replace, accessible names. |
 | `NavigationDial` | Controlled `value: NavigationPage` and `onValueChange`. Values: `home`, `cv`, `blog`; no routing, links, or personal data. Wire selection to your own state/router if desired. |
+| `RotaryDial`, `DialOption`, `RotaryDialProps` | Generic controlled dial: `options: readonly { value: Value; label: string }[]`, `value`, `onValueChange`, required accessible `label`; optional `groupLabel`, `size="default"`/`"sm"`, `helpText`, and merged `className`. At least two uniquely valued, named options are required. |
 | `cn` | `clsx` + `tailwind-merge` for conditional and conflicting utility classes. |
 | `tabsListVariants` | Typed tab-track CVA variant helper. |
 | `dialPages`, `dialAngle`, `dialPosition`, `clampDialAngle`, `angularDelta` | Dial labels/detents and pure geometry helpers; same end stops used by `NavigationDial`. |
@@ -108,6 +109,47 @@ and screen-reader value semantics. Focused wheel input is throttled and respects
 end stops; unfocused wheel input is left to page scrolling. Page labels provide
 an alternate 44px touch target. These fixed Home/CV/Blog labels are a reusable
 navigation contract, not included pages.
+
+`RotaryDial` provides the same mechanics for your own string-valued options.
+`NavigationDial` remains the original three-position wrapper with unchanged
+Home/CV/Blog behavior, accessible names, and 68px knob. The generic default
+uses equally spaced detents from -60 to 60 degrees; `size="sm"` puts the labels
+and knob in one horizontal row, 36px high (44px for coarse pointers). Compact
+help is visually hidden but remains the range's accessible description.
+Each visible label is a directly clickable, pressed-state button.
+
+```tsx
+import { useState } from 'react'
+import { RotaryDial, Status } from '@giulioungaretti/home-design-system'
+
+const languages = [
+  { value: 'da', label: 'Dansk' },
+  { value: 'en', label: 'English' },
+] as const
+
+export function LanguageControl() {
+  const [language, setLanguage] = useState<'da' | 'en'>('da')
+  return (
+    <>
+      <RotaryDial
+        options={languages}
+        value={language}
+        onValueChange={setLanguage}
+        label="Answer language"
+        size="sm"
+      />
+      <Status tone="success" className="connection connected">Connected</Status>
+    </>
+  )
+}
+```
+
+The native range uses `label` as its accessible name and the selected option's
+label as `aria-valuetext`. Arrow keys, Home/End, focused wheel input, relative
+pointer rotation, and cancellation all retain the original behavior. Invalid
+configurations throw descriptive errors; the component does not silently choose
+a fallback. Success uses the independently derived semantic `--success` token;
+the original orange `--signal` and five palette colors are unchanged.
 
 ### Native fields
 

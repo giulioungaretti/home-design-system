@@ -113,4 +113,21 @@ describe('reusable system', () => {
       'alert',
     )
   })
+  it('adds an opt-in success status while preserving native span props and orange on state', () => {
+    const ref = createRef<HTMLSpanElement>()
+    render(
+      <>
+        <Status tone="success" className="connection connected" role="status" aria-live="polite" ref={ref}>Connected</Status>
+        <Status tone="on">Running</Status>
+      </>,
+    )
+    const connected = screen.getByRole('status')
+    expect(ref.current).toBe(connected)
+    expect(connected).toHaveClass('status', 'connection', 'connected')
+    expect(connected).toHaveAttribute('data-tone', 'success')
+    expect(connected).toHaveAttribute('aria-live', 'polite')
+    expect(connected.querySelector('.status-dot')).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByText('Running')).toHaveAttribute('data-tone', 'on')
+    expect(screen.getByText('Running')).not.toHaveAttribute('role')
+  })
 })

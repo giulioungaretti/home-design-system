@@ -21,6 +21,7 @@ colors:
   ring: '#261914'
   surface-highlight: '#FFFFFF'
   signal: '#FE6900'
+  success: '#2F6B3C'
 typography:
   headline:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -106,6 +107,9 @@ are derived semantic neutrals, not additional Halifax colors. See `NOTICE`.
 - Chocolate: foreground, primary actions, focus rings.
 - Sun: secondary controls, checked switches, text selection.
 - Orange: active indicator lights, not the default button fill.
+- Success green (`--success`, `#2F6B3C`): confirmed success/connection indicators.
+  This semantic addition is independently derived, not part of the five-color
+  Halifax palette; orange active indicators retain their original meaning.
 - Red: destructive text/borders and alert states.
 - Frost: palette specimen and the alert-surface alias, not general panel fill.
 - Background/card/muted: chassis, raised enamel, inset tracks.
@@ -192,10 +196,18 @@ separator semantics. Typed variants use CVA; `cn` combines `clsx` and
   border, and shadow. The line variant removes track fill/border.
 - Switches: 48×28px inset track, 20px card thumb; checked Sun fill and 24px thumb
   translation, unchecked 2px. The accepted `size` prop does not change geometry.
-- Status: orange on, muted off, red alert, always paired with text.
+- Status: orange on, muted off, red alert, green success, always paired with text.
+  Native span props and merged classes allow hosts to add live-region semantics
+  explicitly; the decorative dot remains hidden from assistive technology.
 - Navigation dial: 68px knob in a 180px group, -60°/0°/60° detents, mechanical
   face rotation. Native range and labels expose selection; drag preview only
   commits on release. Home/CV/Blog are fixed local navigation labels, not pages.
+- Rotary dial: the same mechanics with typed string options, at least two unique
+  values, and equally spaced end-stopped detents. Compact mode is a horizontal
+  label/knob/label row, 36px high (44px for coarse pointers), with hidden help.
+  Visible labels remain directly clickable; selected labels are underlined as
+  well as exposed with `aria-pressed`. The native range has an explicit name
+  and selected-option value text.
 
 ## Motion and accessibility
 

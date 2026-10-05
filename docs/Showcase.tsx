@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import {
   Button, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Separator,
-  IconButton, Input, Select, Textarea, Panel, PageHeading, Status, NavigationDial,
+  IconButton, Input, Select, Textarea, Panel, PageHeading, Status, NavigationDial, RotaryDial,
   type NavigationPage,
 } from '../src/index.js'
 
@@ -30,6 +30,7 @@ export function Showcase() {
   const [saved, setSaved] = useState('')
   const [level, setLevel] = useState(2)
   const [page, setPage] = useState<NavigationPage>('home')
+  const [language, setLanguage] = useState<'da' | 'en'>('da')
   function submit(event: FormEvent) {
     event.preventDefault()
     if (!name.trim()) {
@@ -182,6 +183,22 @@ export function Showcase() {
             Home, CV, and Blog are local specimen labels, not links to personal
             content. Selection is not persisted.
           </p>
+          <div className="specimen mt-7">
+            <RotaryDial
+              options={[{ value: 'da', label: 'Dansk' }, { value: 'en', label: 'English' }]}
+              value={language}
+              onValueChange={setLanguage}
+              label="Answer language"
+              size="sm"
+            />
+            <output className="font-mono text-sm" aria-live="polite">
+              Language: {language === 'da' ? 'Dansk' : 'English'}
+            </output>
+          </div>
+          <p className="helper">
+            A compact two-position dial, 36px high or 44px for coarse pointers.
+            Both labels select directly; the knob also supports keyboard and drag.
+          </p>
         </div>
       </section>
       <section className="showcase-section" aria-labelledby="states-heading">
@@ -197,6 +214,7 @@ export function Showcase() {
         <div>
           <div className="specimen">
             <Status tone="on">Running</Status>
+            <Status tone="success">Connected</Status>
             <Status>Paused</Status>
             <Status tone="alert">Attention needed</Status>
           </div>

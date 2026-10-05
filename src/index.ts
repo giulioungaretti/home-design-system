@@ -12,6 +12,8 @@ export {
 } from './components/ui/tooltip.js'
 export { IconButton, Panel, PageHeading, Status } from './components/system.js'
 export { NavigationDial } from './components/NavigationDial.js'
+export { RotaryDial } from './components/RotaryDial.js'
+export type { DialOption, RotaryDialProps } from './components/RotaryDial.js'
 export { cn } from './lib/utils.js'
 export {
   angularDelta, clampDialAngle, dialAngle, dialPages, dialPosition,

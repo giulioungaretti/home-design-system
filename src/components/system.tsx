@@ -26,12 +26,14 @@ export function Panel({
 export function Status({
   tone = 'off',
   children,
-}: {
-  tone?: 'on' | 'off' | 'alert'
+  className,
+  ...props
+}: ComponentProps<'span'> & {
+  tone?: 'on' | 'off' | 'alert' | 'success'
   children: ReactNode
 }) {
   return (
-    <span className="status" data-tone={tone}>
+    <span className={cn('status', className)} data-tone={tone} {...props}>
       <span className="status-dot" aria-hidden="true" />
       {children}
     </span>

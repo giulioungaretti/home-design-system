@@ -55,4 +55,11 @@ describe('standalone showcase', () => {
     await user.click(screen.getByRole('button', { name: 'Reset demo level' }))
     expect(screen.getByLabelText('Demo level')).toHaveTextContent('Level 2 / 5')
   })
+  it('demonstrates the compact language dial and successful status', async () => {
+    render(<App />)
+    await userEvent.click(screen.getByRole('button', { name: 'English' }))
+    expect(screen.getByRole('slider', { name: 'Answer language' })).toHaveAttribute('aria-valuetext', 'English')
+    expect(screen.getByText('Language: English')).toBeInTheDocument()
+    expect(screen.getByText('Connected')).toHaveAttribute('data-tone', 'success')
+  })
 })

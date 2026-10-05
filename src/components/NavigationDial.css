@@ -116,6 +116,50 @@
   color: var(--muted-foreground);
 }
 
+.navigation-dial[data-size='sm'] {
+  --dial-size: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+}
+
+.navigation-dial[data-size='sm'] .navigation-dial-labels {
+  display: contents;
+}
+
+.navigation-dial[data-size='sm'] .navigation-dial-labels button {
+  order: 2;
+  min-height: 36px;
+  transform: none;
+}
+
+.navigation-dial[data-size='sm'] .navigation-dial-labels button:first-child {
+  order: 0;
+}
+
+.navigation-dial[data-size='sm'] .navigation-dial-knob {
+  order: 1;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.navigation-dial[data-size='sm'] .navigation-dial-detent {
+  top: -4px;
+  height: 3px;
+  transform-origin: 50% calc(var(--dial-size) / 2 + 4px);
+}
+
+@media (pointer: coarse) {
+  .navigation-dial[data-size='sm'] {
+    --dial-size: 44px;
+  }
+
+  .navigation-dial[data-size='sm'] .navigation-dial-labels button {
+    min-height: 44px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .navigation-dial-face {
     transition: none;
