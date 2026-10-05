@@ -41,4 +41,18 @@ describe('standalone showcase', () => {
     expect(screen.getByRole('tab', { name: 'Keyboard' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Space toggles a focused switch')
   })
+
+  it('demonstrates native fields and the compact reset control', async () => {
+    render(<App />)
+    const user = userEvent.setup()
+    await user.selectOptions(screen.getByLabelText('Demo playback mode'), 'line')
+    expect(screen.getByLabelText('Demo playback mode')).toHaveValue('line')
+    expect(screen.getByLabelText('Demo playback mode')).toHaveAccessibleDescription(/native select/)
+    await user.type(screen.getByLabelText('Demo listening notes'), 'Morning{Enter}news')
+    expect(screen.getByLabelText('Demo listening notes')).toHaveValue('Morning\nnews')
+    expect(screen.getByLabelText('Serial number (unavailable)')).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'Raise demo level' }))
+    await user.click(screen.getByRole('button', { name: 'Reset demo level' }))
+    expect(screen.getByLabelText('Demo level')).toHaveTextContent('Level 2 / 5')
+  })
 })

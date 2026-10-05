@@ -85,7 +85,8 @@ All components and helpers are named exports; types can be derived with React's
 | Export | Contract |
 | --- | --- |
 | `Button`, `buttonVariants` | Typed CVA `variant`: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link`. `size`: `default`, `sm`, `lg`, `icon`, `icon-lg`. Native button props; Radix Slot via `asChild`. |
-| `IconButton` | Required action `label` and icon `children`; circular 48px control plus tooltip. Wrap the application in `TooltipProvider`. Accepts Button variant and native props, not `size`/`asChild`. |
+| `IconButton` | Required action `label` and icon `children`; circular 48px control plus tooltip. Optional `size="sm"` is 36px, increasing to 44px for coarse pointers; `size="default"` preserves 48px. Wrap the application in `TooltipProvider`. Accepts Button variant and native props, not `asChild`. |
+| `Input`, `Select`, `Textarea` | Native `input`, `select`, and `textarea` props, including React 19 `ref`, merged `className`, and `data-slot="input"`/`"select"`/`"textarea"`. Shared `.field` material and 48px minimum height. `Select` accepts native `option`/`optgroup` children, `multiple`, and `size`; no custom popup. |
 | `Panel` | Semantic `section`; `surface="raised"` (default) or `"recessed"`. Supply a heading and `aria-labelledby`, or `aria-label`. |
 | `Status` | `tone="off"` (default), `"on"`, or `"alert"` with required text children. Decorative signal dot; not a live region by itself. |
 | `PageHeading` | Required `title` renders an h1; optional introductory children. Use one h1 per page. |
@@ -107,6 +108,44 @@ and screen-reader value semantics. Focused wheel input is throttled and respects
 end stops; unfocused wheel input is left to page scrolling. Page labels provide
 an alternate 44px touch target. These fixed Home/CV/Blog labels are a reusable
 navigation contract, not included pages.
+
+### Native fields
+
+`Input`, `Select`, and `Textarea` retain native controlled and uncontrolled
+behavior, form submission/reset, disabled states, and React 19 refs. They do not
+generate labels, IDs, validation, errors, or a custom option picker. Textareas
+resize vertically; use `rows` for their initial height. Input `size` and Select
+`size` remain native numeric attributes, not design-system size variants.
+
+```tsx
+import { Input, Select, Textarea } from '@giulioungaretti/home-design-system'
+
+<label className="label" htmlFor="device-name">Device name</label>
+<Input
+  id="device-name"
+  name="deviceName"
+  required
+  aria-invalid={Boolean(error)}
+  aria-describedby={error ? 'device-error' : 'device-hint'}
+/>
+{error
+  ? <p className="error" id="device-error" role="alert">{error}</p>
+  : <p className="helper" id="device-hint">Choose a recognizable name.</p>}
+
+<label className="label" htmlFor="source">Source</label>
+<Select id="source" name="source" defaultValue="radio">
+  <option value="radio">Radio</option>
+  <option value="line">Line input</option>
+</Select>
+
+<label className="label" htmlFor="notes">Notes</label>
+<Textarea id="notes" name="notes" rows={3} aria-describedby="notes-hint" />
+<p className="helper" id="notes-hint">Optional listening notes.</p>
+```
+
+The host owns `error` and the validation policy in this example. Import the
+library stylesheet once as shown above. Native select menus retain the platform
+appearance and keyboard behavior.
 
 ### Accessibility
 

@@ -162,7 +162,8 @@ in an inset track.
 
 Panels, fields, buttons, and tab keys share a 3px radius; Tailwind's `rounded-sm`,
 `rounded-md`, and `rounded-lg` map to that semantic radius. Icon buttons are
-48px or 64px circles; indicator dots and knobs are circular. Switch tracks are
+48px or 64px circles; compact `IconButton` controls are 36px circles, increasing
+to 44px for coarse pointers. Indicator dots and knobs are circular. Switch tracks are
 pill-shaped because a circular thumb travels within them, not because every
 panel should be a pill. Borders are generally 1px.
 
@@ -176,12 +177,17 @@ separator semantics. Typed variants use CVA; `cn` combines `clsx` and
 - Buttons: chocolate default, raised enamel outline, Sun secondary, transparent
   ghost, enamel/red destructive, underlined link. Default/small minimum height
   44px, large 52px; horizontal padding 20px/12px/24px. Icon sizes are 48px/64px
-  with 16px/20px SVGs. `IconButton` requires a label and supplies a tooltip.
+  with 16px/20px SVGs. `IconButton` requires a label and supplies a tooltip;
+  its optional `size="sm"` uses a 36px circle (44px for coarse pointers) with
+  the same 16px icon, while the default remains 48px.
 - Panels: card fill, border, and panel shadow; recessed uses muted fill/no
   shadow. Name semantic sections when they represent a region.
 - Fields: 48px minimum height, card fill, inset contact shadow, shared radius.
   Invalid fields have a destructive border plus associated error copy. Disabled
-  fields use 50% opacity; buttons/tab keys use 45%.
+  fields use 50% opacity; buttons/tab keys use 45%. Native `Input`, `Select`,
+  and `Textarea` share `.field`, preserve native props and React 19 refs, and
+  leave labels/descriptions/validation to the host. Selects keep the platform
+  picker; textareas resize vertically.
 - Tabs: inset muted 48px track with 40px keys. Active keys gain card fill,
   border, and shadow. The line variant removes track fill/border.
 - Switches: 48×28px inset track, 20px card thumb; checked Sun fill and 24px thumb

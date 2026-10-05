@@ -1,4 +1,7 @@
 export { Button, buttonVariants } from './components/ui/button.js'
+export { Input } from './components/ui/input.js'
+export { Select } from './components/ui/select.js'
+export { Textarea } from './components/ui/textarea.js'
 export { Separator } from './components/ui/separator.js'
 export { Switch } from './components/ui/switch.js'
 export {

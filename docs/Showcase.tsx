@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import {
   Button, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Separator,
-  IconButton, Panel, PageHeading, Status, NavigationDial,
+  IconButton, Input, Select, Textarea, Panel, PageHeading, Status, NavigationDial,
   type NavigationPage,
 } from '../src/index.js'
 
@@ -145,6 +145,9 @@ export function Showcase() {
             >
               <Plus aria-hidden="true" />
             </IconButton>
+            <IconButton size="sm" label="Reset demo level" onClick={() => setLevel(2)}>
+              <RotateCcw aria-hidden="true" />
+            </IconButton>
             <Button asChild variant="link">
               <a href="#usage">
                 Usage notes
@@ -154,6 +157,7 @@ export function Showcase() {
           </div>
           <p className="helper">
             Try these controls. Their state lives only in this page.
+            The compact reset grows from 36px to 44px for coarse pointers.
           </p>
         </div>
       </section>
@@ -248,8 +252,7 @@ export function Showcase() {
           <label className="label" htmlFor="device-name">
             Demo device name
           </label>
-          <input
-            className="field"
+          <Input
             id="device-name"
             value={name}
             onChange={(event) => {
@@ -280,6 +283,33 @@ export function Showcase() {
           >
             {saved}
           </p>
+          <label className="label mt-6" htmlFor="device-mode">
+            Demo playback mode
+          </label>
+          <Select id="device-mode" defaultValue="radio" aria-describedby="mode-hint">
+            <option value="radio">Radio</option>
+            <option value="line">Line input</option>
+            <option value="wireless" disabled>Wireless (unavailable)</option>
+          </Select>
+          <p className="helper" id="mode-hint">
+            A native select. Use the keyboard or your device&apos;s option picker.
+          </p>
+          <label className="label mt-6" htmlFor="device-notes">
+            Demo listening notes
+          </label>
+          <Textarea
+            id="device-notes"
+            rows={3}
+            placeholder="e.g. morning news in the kitchen"
+            aria-describedby="notes-hint"
+          />
+          <p className="helper" id="notes-hint">
+            Multiline notes stay on this page. Resize vertically if needed.
+          </p>
+          <label className="label mt-6" htmlFor="device-serial">
+            Serial number (unavailable)
+          </label>
+          <Input id="device-serial" disabled defaultValue="Not connected" />
         </form>
       </section>
       <section className="showcase-section" aria-labelledby="materials-heading">
